@@ -1,0 +1,31 @@
+<!doctype html>
+<title>JSON Filter</title>
+<script src="lib/underscore.js"></script>
+<script src="lib/backbone.js"></script>
+<script src="js/data.js"></script>
+<script src="js/filter.js"></script>
+<script>
+var constraints = new FilterCollection();
+
+constraints.create({
+  check: filters.range(1,100)
+});
+
+write('constraints.check(5): ');
+write(constraints.check(5));
+
+write('-');
+
+write('constraints.filter([1,500,82,24,-89]): ');
+write(constraints.filter([1,500,82,24,-89]));
+
+/* utilities */
+
+function write(json) {
+  if (_.isString(json))
+    document.write(json + "<br/>");
+  else
+    document.write(JSON.stringify(json) + "<br/>");
+}
+
+</script>
