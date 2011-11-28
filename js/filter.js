@@ -1,5 +1,36 @@
 var FilterCollection, FilterModel, filters;
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+Backbone.sync = function(method, model, options) {
+  return options.success(model);
+};
+FilterModel = Backbone.Model.extend({
+  defaults: {
+    check: function() {
+      return true;
+    }
+  },
+  check: function(val) {
+    return this.get('check')(val);
+  }
+});
+FilterCollection = Backbone.Collection.extend({
+  model: FilterModel,
+  check: function(val) {
+    var ret;
+    ret = true;
+    this.each(function(model) {
+      if (!model.check(val)) {
+        return ret = false;
+      }
+    });
+    return ret;
+  },
+  filter: function(list) {
+    return _(list).filter(__bind(function(val) {
+      return this.check(val);
+    }, this));
+  }
+});
 filters = {
   range: function(min, max, inclusive) {
     if (inclusive == null) {
@@ -34,34 +65,3 @@ filters = {
     };
   }
 };
-Backbone.sync = function(method, model, options) {
-  return options.success(model);
-};
-FilterModel = Backbone.Model.extend({
-  defaults: {
-    check: function() {
-      return true;
-    }
-  },
-  check: function(val) {
-    return this.get('check')(val);
-  }
-});
-FilterCollection = Backbone.Collection.extend({
-  model: FilterModel,
-  check: function(val) {
-    var ret;
-    ret = true;
-    this.each(function(model) {
-      if (!model.check(val)) {
-        return ret = false;
-      }
-    });
-    return ret;
-  },
-  filter: function(list) {
-    return _(list).filter(__bind(function(val) {
-      return this.check(val);
-    }, this));
-  }
-});
