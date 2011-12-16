@@ -1,0 +1,40 @@
+<!doctype html>
+<title>Data Model</title>
+<script src="lib/jquery.js"></script>
+<script src="lib/underscore.js"></script>
+<script src="lib/backbone.js"></script>
+<input type="file" id="files" name="files[]" multiple />
+<output id="list"></output>
+
+<script>
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // files is a FileList of File objects. List some properties.
+    var output = [],
+        queue  = [];
+    _(files).each(function(f,i) {
+      var id = 'file-' + i;
+      output.push('<li><strong>', f.name, '</strong> (', f.type || 'n/a', ') - ',
+                  f.size, ' bytes, last modified: ',
+                  f.lastModifiedDate.toLocaleDateString(), '</li>',
+                  '<pre id="', id, '"></pre>');
+      queue.push([id,f]);
+    });
+    document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+
+    _(queue).each(function(file) {
+      printFile(file[0], file[1]);
+    });
+  }
+
+  function printFile(id,f) {
+    var reader = new FileReader();
+    reader.onloadend = function() {
+      $('#' + id).text(reader.result);
+    };
+    reader.readAsText(f);
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
