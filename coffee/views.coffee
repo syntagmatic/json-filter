@@ -4,6 +4,7 @@ GridView = Backbone.View.extend
     @model.bind('all', @render, @)
   render: ->
     html = ""
+    console.log(@model)
     _.each(@model.get('data'), (d, i) =>
       html += @template(d)
     )

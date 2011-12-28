@@ -9,6 +9,7 @@ GridView = Backbone.View.extend({
     var html,
       _this = this;
     html = "";
+    console.log(this.model);
     _.each(this.model.get('data'), function(d, i) {
       return html += _this.template(d);
     });
