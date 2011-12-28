@@ -1,7 +1,9 @@
 var DataModel, detectCols, detectTypes;
+
 Backbone.sync = function(method, model, options) {
   return options.success(model);
 };
+
 DataModel = Backbone.Model.extend({
   defaults: {
     data: [],
@@ -27,9 +29,11 @@ DataModel = Backbone.Model.extend({
     }
   }
 });
+
 detectCols = function(data) {
   return _(data[0]).keys();
 };
+
 detectTypes = function(data) {
   return _(data[0]).map(function(v, k) {
     return typeof v;

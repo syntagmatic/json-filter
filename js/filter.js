@@ -1,8 +1,24 @@
-var FilterCollection, FilterModel, filters;
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var FilterCollection, FilterModel, TransformedModel, filters;
+
 Backbone.sync = function(method, model, options) {
   return options.success(model);
 };
+
+TransformedModel = Backbone.Model.extend({
+  defaults: {
+    data: []
+  },
+  initialize: function(x) {
+    this.update();
+    return this.get('funcModel').bind("all", this.update, this);
+  },
+  update: function() {
+    return this.set({
+      data: this.get('funcModel')[this.get('func')](this.get('dataModel').get('data'))
+    });
+  }
+});
+
 FilterModel = Backbone.Model.extend({
   defaults: {
     check: function() {
@@ -13,29 +29,28 @@ FilterModel = Backbone.Model.extend({
     return this.get('check')(val);
   }
 });
+
 FilterCollection = Backbone.Collection.extend({
   model: FilterModel,
   check: function(val) {
     var ret;
     ret = true;
     this.each(function(model) {
-      if (!model.check(val)) {
-        return ret = false;
-      }
+      if (!model.check(val)) return ret = false;
     });
     return ret;
   },
   filter: function(list) {
-    return _(list).filter(__bind(function(val) {
-      return this.check(val);
-    }, this));
+    var _this = this;
+    return _(list).filter(function(val) {
+      return _this.check(val);
+    });
   }
 });
+
 filters = {
   range: function(min, max, inclusive) {
-    if (inclusive == null) {
-      inclusive = "both";
-    }
+    if (inclusive == null) inclusive = "both";
     if (inclusive === "both") {
       return function(val) {
         return (min <= val && val <= max);

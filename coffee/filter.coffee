@@ -5,6 +5,17 @@
 Backbone.sync = (method, model, options) ->
   options.success(model)
 
+# Filtered Data Model
+TransformedModel = Backbone.Model.extend
+  defaults:
+    data: []
+  initialize: (x) ->
+    @update()
+    @get('funcModel').bind("all", @update, @)
+  update: ->
+    @set data: @get('funcModel')[@get('func')](@get('dataModel').get('data'))
+    
+# Filter Model
 FilterModel = Backbone.Model.extend
   defaults:
     check: -> true

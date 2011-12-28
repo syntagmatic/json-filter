@@ -4,8 +4,28 @@
 <script src="lib/backbone.js"></script>
 <script src="js/data.js"></script>
 <script src="js/data-model.js"></script>
+<script src="js/filter.js"></script>
 <script>
   var dataModel = new DataModel({
     data: data
   });
+
+  var constraints = new FilterCollection();
+
+  var filter1 = constraints.create({
+    check: function(d) { return d.b > 50; }
+  });
+  
+  var filtered = new TransformedModel({
+    dataModel: dataModel,
+    funcModel: constraints,
+    func: "filter"
+  });
+
+  var filter2 = constraints.create({
+    check: function(d) { return d.e > 70; }
+  });
+
+  constraints.remove(filter1);
+  constraints.remove(filter2);
 </script>
