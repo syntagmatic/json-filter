@@ -2,15 +2,18 @@
 <title>Data Model</title>
 <script src="lib/underscore.js"></script>
 <script src="lib/backbone.js"></script>
+<script src="lib/jquery.js"></script>
 <script src="js/data.js"></script>
 <script src="js/data-model.js"></script>
 <script src="js/filter.js"></script>
+<script src="js/views.js"></script>
 <script>
+$(function() {
   var dataModel = new DataModel({
     data: data
   });
 
-  var constraints = new FilterCollection();
+  window.constraints = new FilterCollection();
 
   var filter1 = constraints.create({
     check: function(d) { return d.b > 50; }
@@ -21,6 +24,11 @@
     funcModel: constraints,
     func: "filter"
   });
+  
+  var view = new GridView({
+    el: $('#datagrid'),
+    model: filtered
+  });
 
   var filter2 = constraints.create({
     check: function(d) { return d.e > 70; }
@@ -28,4 +36,10 @@
 
   constraints.remove(filter1);
   constraints.remove(filter2);
+
+});
 </script>
+
+<body>
+<table id="datagrid">
+</table>

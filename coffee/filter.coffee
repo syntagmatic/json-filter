@@ -1,9 +1,11 @@
 # JSON Filter
-# Copyright 2010 Kai Chang
+# Copyright 2010 Kai Chang and Mary Becica
 
 # Stub out sync, pass along model
 Backbone.sync = (method, model, options) ->
   options.success(model)
+
+# Highlight Model
 
 # Filtered Data Model
 TransformedModel = Backbone.Model.extend
@@ -50,5 +52,4 @@ filters =
     (val) -> _.contains(list, val)
   exclude: (list) ->
     (val) -> not _.contains(list, val)
-
 
